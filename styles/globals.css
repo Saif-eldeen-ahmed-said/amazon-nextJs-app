@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .link {
+        @apply cursor-pointer hover:underline;
+    }
+    .button-color {
+        @apply bg-gradient-to-b  from-yellow-200 to-yellow-500   border border-yellow-300 rounded-sm  active:from-yellow-500
+        ;
+    }
+}
