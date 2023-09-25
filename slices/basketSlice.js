@@ -1,42 +1,79 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState={
-    items:[],
+const initialState = {
+    items: [],
 }
 
-export const basketSlice=createSlice({
-    name:"basket",
+export const basketSlice = createSlice({
+    name: "basket",
     initialState,
-    reducers :{
-        addToBasket:(state,action)=>{
-            state.items=[...state.items,action.payload];
+    reducers: {
+        addToBasket: (state, action) => {
+            const array = [...state.items, action.payload];
+            const index = state.items.findIndex(
+                (item) => item.title === action.payload.title
+            )
+            if (index >= 0) {
+                array.splice(index, 1)
+            }
+            state.items = array
+
         },
-        removeBasket:(state,action)=>{
-        //     let newitemsarray = [...state.items];
-        // const remove=state.items.findIndex(item=> item.id === action.payload)
+        removeBasket: (state, action) => {
+            let index = state.items.findIndex(
+                (item) => item.title === action.payload.title
+            )
+            let newbasket = [...state.items];
 
-        //     if(remove >= 0) {
-        //     newitemsarray.splice(remove,1);
-        //     } else {
-        //         console.warn("hello peter");
-        //     }
-        //     state.items=newitemsarray
-            // state.items.splice(state.items.findIndex((item) => item.id === action.payload), 1);
-            const itemId = action.payload.title;
-            const array =state.items.findIndex((item)=>item.title === itemId)
-            const newArray=[...state.items]
-                console.log(newArray.splice(array,1))
-            if(array) {
-
+            if (index >= 0) {
+                newbasket.splice(index, 1)
+            }
+            else {
+                console.warn("error this item is not available");
             }
 
+            state.items = newbasket
+
         }
-}
+        , increaseQuantity: (state, action) => {
+            const theIndex = state.items.find(
+                (item) => item.title === action.payload.title
+            )
+
+            const theQuan = state.items.find(
+                (item) => item.quantity == action.payload.quantity
+            )
+            const momo = action.payload.mount + 1
+            const tearr = [...state.items];
+
+            if (theIndex && momo <= 10) {
+                theQuan.quantity = momo
+            }
+
+            state.items = tearr
+        },
+        decreaseQuantity: (state, action) => {
+            const theIndex = state.items.find(
+                (item) => item.title === action.payload.title
+            )
+            const theQuan = state.items.find(
+                (item) => item.quantity == action.payload.quantity
+            )
+            const momo = action.payload.mount - 1
+            const thearr = [...state.items];
+
+            if (theIndex && momo >= 1) {
+                theQuan.quantity = momo
+            }
+
+            state.items = thearr
+        }
+    }
 });
 
-export const {addToBasket , removeBasket} =basketSlice.actions
+export const { addToBasket, removeBasket, increaseQuantity, decreaseQuantity } = basketSlice.actions
 
-export const selectitems = (state)=>state.basket?.items;
-export const selectTotal =(state)=>state.basket.items.reduce((total,item)=> total + item.price , 0 )
+export const selectitems = (state) => state.basket?.items;
+export const selectTotal = (state) => state.basket.items.reduce((total, item) => total + (item.price * item.quantity), 0)
 
 export default basketSlice.reducer

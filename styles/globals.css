@@ -11,4 +11,8 @@
         @apply bg-gradient-to-b  from-yellow-200 to-yellow-500   border border-yellow-300 rounded-sm  active:from-yellow-500
         ;
     }
+    .signin-button {
+        @apply bg-gradient-to-b  from-white to-gray-700  active:from-gray-100
+        ;
+    }
 }
